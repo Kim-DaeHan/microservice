@@ -178,6 +178,7 @@ function onEndClient(options: any) {
   delete mapClients[key]
 }
 
+// 마이크로서비스 접속 에러 처리
 function onErrorClient(options: any) {
   console.log('onErrorClient')
 }
