@@ -21,6 +21,7 @@ const mapResponse: Record<number, http.ServerResponse> = {}
 const mapRR: Record<string, number> = {}
 let index = 0
 
+// HTTP 서버 만듬
 const server = http
   .createServer((req, res) => {
     const method = req.method
@@ -67,21 +68,26 @@ const server = http
     const clientDistributor = new tcpClient(
       '127.0.0.1',
       9000,
+      // 접속 이벤트
       (options) => {
         isConnectedDistributor = true
         clientDistributor.write(packet)
       },
+      // 데이터 수신 이벤트
       (options, data) => {
         onDistribute(data)
       },
+      // 접속 종료 이벤트
       (options) => {
         isConnectedDistributor = false
       },
+      // 에러 이벤트
       (options) => {
         isConnectedDistributor = false
       },
     )
 
+    // 주기적인 Distributor 접속 상태 확인
     setInterval(() => {
       if (!isConnectedDistributor) {
         clientDistributor.connect()
@@ -89,6 +95,7 @@ const server = http
     }, 3000)
   })
 
+// API 호출 처리
 function onRequest(res: http.ServerResponse, method: string, pathname: string, params: any) {
   const key = method + pathname
   const client = mapUrls[key]
@@ -98,6 +105,7 @@ function onRequest(res: http.ServerResponse, method: string, pathname: string, p
     res.end()
     return
   } else {
+    // API 호출에 대한 고유키 값 설정
     params.key = index
     const packet = {
       uri: pathname,
@@ -108,6 +116,7 @@ function onRequest(res: http.ServerResponse, method: string, pathname: string, p
     mapResponse[index] = res
     index++
 
+    // 라운드 로빈 처리
     if (mapRR[key] === undefined) {
       mapRR[key] = 0
     }
@@ -118,6 +127,7 @@ function onRequest(res: http.ServerResponse, method: string, pathname: string, p
   }
 }
 
+// Distributor 접속 처리
 function onDistribute(data: Buffer) {
   const parsedData: { params: NodeInfo[] } = JSON.parse(data.toString())
 
@@ -144,10 +154,12 @@ function onDistribute(data: Buffer) {
   }
 }
 
+// 마이크로서비스 접속 이벤트 처리
 function onCreateClient(options: any) {
   console.log('onCreateClient')
 }
 
+// 마이크로서비스 응답 처리
 function onReadClient(options: any, packet: any) {
   console.log('onReadClient', packet)
   mapResponse[packet.key].writeHead(200, { 'Content-Type': 'application/json' })
@@ -155,6 +167,7 @@ function onReadClient(options: any, packet: any) {
   delete mapResponse[packet.key]
 }
 
+// 마이크로서비스 접속 종료 처리
 function onEndClient(options: any) {
   const key = options.host + ':' + options.port
   console.log('onEndClient', mapClients[key])
