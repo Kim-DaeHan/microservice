@@ -1,6 +1,7 @@
-import net from 'net'
+import * as net from 'net'
 import tcpClient from './client'
 
+// const net = require('net')
 class tcpServer {
   private context: {
     port: number

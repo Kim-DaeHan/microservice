@@ -1,12 +1,14 @@
 {
   "compilerOptions": {
+    "types": ["node"],
     "module": "commonjs",
     "declaration": true,
     "removeComments": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "allowSyntheticDefaultImports": true,
-    "target": "es2017",
+    "target": "ES6",
+    "lib": ["ES6", "dom"],
     "sourceMap": true,
     "outDir": "./bin",
     "baseUrl": "./",

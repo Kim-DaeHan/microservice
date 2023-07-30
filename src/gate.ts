@@ -129,7 +129,8 @@ function onRequest(res: http.ServerResponse, method: string, pathname: string, p
 
 // Distributor 접속 처리
 function onDistribute(data: Buffer) {
-  const parsedData: { params: NodeInfo[] } = JSON.parse(data.toString())
+  const jsonString: string = JSON.stringify(data)
+  const parsedData: { params: NodeInfo[] } = JSON.parse(jsonString)
 
   for (const node of parsedData.params) {
     const key = `${node.host}:${node.port}`

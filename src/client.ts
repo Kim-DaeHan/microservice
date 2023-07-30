@@ -1,4 +1,5 @@
-import net, { Socket } from 'net'
+import { Socket } from 'net'
+import * as net from 'net'
 
 /**
  * tcpClient 클래스

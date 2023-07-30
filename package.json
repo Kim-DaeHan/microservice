@@ -7,10 +7,16 @@
     "build": "tsc",
     "start": "node ./bin/monolithic.js",
     "dev": "ts-node ./src/monolithic.ts",
+    "distri": "ts-node ./src/distributor.ts",
+    "gate": "ts-node ./src/gate.ts",
+    "goods": "ts-node ./src/micro/microservice_goods.ts",
+    "members": "ts-node ./src/micro/microservice_members.ts",
+    "purchases": "ts-node ./src/micro/microservice_purchases.ts",
     "test": "ts-node ./src/client.ts"
   },
   "dependencies": {
-    "@types/node": "^20.3.1",
+    "@types/node": "^20.4.1",
+    "mysql": "^2.18.1",
     "typescript": "^5.1.3"
   },
   "devDependencies": {
